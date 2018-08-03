@@ -11,5 +11,5 @@ The navigation bar is derived from Tania Rascia's article on [Responsive Dropdow
 $ bundle install
 $ rerun --no-notify bundle exec rackup
 ```
-Have fun tweeking, coding and testing.
+Have fun Tweeking, Coding and testing.
 

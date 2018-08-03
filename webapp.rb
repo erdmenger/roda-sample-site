@@ -4,11 +4,16 @@ class Webapp < Roda
   plugin :static, ["/images", "/css", "/js"]
   plugin :render
   plugin :head
+  plugin :multi_view
 
   route do |r|
     # GET / request
     r.root do
-      view("homepage")
+      view :welcome
+    end
+
+    r.get "homepage" do
+      view :homepage
     end
 
     r.get "about" do
@@ -16,9 +21,8 @@ class Webapp < Roda
     end
 
     r.get "contact" do
-      view("Contact")
+      view("contact")
     end
-
 
     # /hello branch
     r.on "hello" do
