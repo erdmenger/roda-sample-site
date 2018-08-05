@@ -7,4 +7,6 @@ gem 'tilt'
 gem 'erubi'
 gem 'roda'
 gem 'pony'
+gem 'rack'
+gem 'date'
 
