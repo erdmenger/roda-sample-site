@@ -8,14 +8,24 @@ class Webapp < Roda
   plugin :render
   plugin :head
   plugin :multi_view
+
+
   plugin :cookies, domain: 'roda-sample-site.eu-de.mybluemix.net', path: '/'
 #  plugin :cookies, domain: 'localhost', path: '/'
+
+#  @theHTTPHost = env["HTTP_HOST"].split(':').first
+  plugin :cookies, domain: @theHTTPHost, path: '/'
 
 
   @page_to_publish = "/"
 
   def publish(thePage)
     @page_to_publish = thePage
+
+    @theHTTPHost = env["HTTP_HOST"].split(':').first
+    # TODO: how can I change the domain of the cookies to my apps actual domain ?
+    # plugin :cookies, domain: @theHTTPHost, path: '/'
+
     req = Rack::Request.new(env)
                                            # puts "request to publish page #{@page_to_publish}"
     cookies = req.cookies()
@@ -142,6 +152,16 @@ class Webapp < Roda
       # theHostname =  ENV.fetch('HOST')
       # puts "the HOSTNAME is #{theHostname}"
       view "environment"
+    end
+
+    r.get "rack-environment" do
+      @theHTTPHost = env["HTTP_HOST"].split(':').first
+      env.each do |theName , theValue|
+        puts "#{theName}, #{theValue}"
+      end
+      # theHostname =  ENV.fetch('HOST')
+      puts "the HTTP_HOST is #{@theHTTPHost}"
+      view "rack-environment"
     end
 
     r.on "hello" do
