@@ -29,6 +29,10 @@ class Webapp < Roda
       view("contact")
     end
 
+    r.get "cookie-guide" do
+      view("cookie-guide")
+    end
+
     r.get "signup-mail" do
       @sender = ENV.fetch('SMTP_SENDER')         # something like 'flood.prevention.bb@gmail.com'
       @smtp_secret = ENV.fetch('SMTP_SECRET')    # the corresponding secret
@@ -42,7 +46,7 @@ class Webapp < Roda
                 })
       @receiver = 'register-me@maildrop.cc'
       @subject = 'Dear Conrributer, happy welcom to flowin!'
-      Pony.mail :to => '#{@receiver}',
+      Pony.mail :to => '#{@Receiver}',
                 :from => '#{@sender}',
                 :subject => '#{@subject}'
       @say = "An email was sent by #{@sender} to #{@receiver} with subject: #(@subject) !"
@@ -119,7 +123,7 @@ class Webapp < Roda
       r.is do
         # GET /hello request
         r.get do
-          "#{@greeting}!"
+          "#{@Greeting}!"
         end
 
         # POST /hello request

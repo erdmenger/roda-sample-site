@@ -11,7 +11,9 @@
   <link rel="stylesheet" href="css/custom.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="css/navbar.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/cookiebanner.min.js"></script>
+
 </head>
 
 <body>
@@ -32,10 +34,12 @@
     </div>
   </section>
 
-  <script type="text/javascript" id="cookiebanner"
-        src="https://cdnjs.cloudflare.com/ajax/libs/cookie-banner/1.2.2/cookiebanner.min.js"></script>
+  <script type="text/javascript">
+    var options = { message: "We use cookies to improve your browsing experience.", moreinfo: "/cookie-guide" };
+    var cb = new Cookiebanner(options); cb.run();
+  </script>
 
-  <article>
+  <Articlem>
     <%= yield %>
   </article>
 </body>
