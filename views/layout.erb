@@ -34,13 +34,15 @@
     </div>
   </section>
 
+
+  <article>
+    <%= yield %>
+  </article>
+
   <script type="text/javascript">
     var options = { message: "We use cookies to improve your browsing experience.", moreinfo: "/cookie-guide" };
     var cb = new Cookiebanner(options); cb.run();
   </script>
 
-  <Articlem>
-    <%= yield %>
-  </article>
 </body>
 
