@@ -11,27 +11,53 @@ class Webapp < Roda
   plugin :cookies, domain: 'localhost', path: '/'
 
 
+  @page_to_publish = "/"
+
+  def publish(thePage)
+    @page_to_publish = thePage
+    req = Rack::Request.new(env)
+                                           # puts "request to publish page #{@page_to_publish}"
+    cookies = req.cookies()
+    if cookies.empty?() then               # puts "> NO cookies set"
+                                           # set a cookie
+      @time = DateTime.now()
+      @requester_ip = req.ip()
+      @cookie_content = "#{@time}--#{@requester_ip}"
+      puts "setting cookie 'opt_in_time' with content: #{@cookie_content} ."
+      response.set_cookie('opt_in_time', @cookie_content )
+
+      render :introduction
+    else                                   # puts "> there are cookies set"
+      view @page_to_publish
+    end
+  end
+
   route do |r|
     # GET / request
     r.root do
-      view :welcome
+      publish( :welcome )                  # 'publish' instead 'view'
+    end
+
+    r.get "welcome" do
+      publish :welcome
     end
 
     r.get "homepage" do
-      view :homepage
+      publish :homepage
     end
 
     r.get "about" do
-      view("about")
+      publish("about")
     end
 
     r.get "contact" do
-      view("contact")
+      publish("contact")
     end
 
     r.get "cookie-guide" do
-      view("cookie-guide")
+      publish("cookie-guide")
     end
+
 
     r.get "signup-mail" do
       @sender = ENV.fetch('SMTP_SENDER')         # something like 'flood.prevention.bb@gmail.com'
@@ -71,8 +97,6 @@ class Webapp < Roda
         response.set_cookie('foo', 'bar')
       else
         puts "> there are cookies set"
-        # response.delete_cookie('foo')
-        
       end
 
       puts "#{cookies}"
@@ -85,8 +109,9 @@ class Webapp < Roda
         @requester_ip = req.ip()
         puts @requester_ip
         @cookie_content = "#{@time}--#{@requester_ip}"
-        puts "setting cookie 'opt_in_time' with content: #{@cookie_content} ."
-        response.set_cookie('opt_in_time', @cookie_content )
+        @cookie_name = "opt_in_time-#{@time}"
+        puts "setting cookie #{@cookie_name} with content: #{@cookie_content} ."
+        response.set_cookie(@cookie_name, @cookie_content )
         response.write("</BR> set cookie 'opt_in_time' with content: #{@cookie_content} .")
       end
 
@@ -102,7 +127,7 @@ class Webapp < Roda
             response.write("</BR> deleted cookie #{key} with value #{value}")
           end
         end
-        puts "deleted all cookies"
+        puts "deleted all cookies. empty your browser cache."
         "delete done"
       end
       response.write( "</BR> -------------------------------------------------------------------" )
