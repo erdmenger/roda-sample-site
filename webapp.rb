@@ -8,7 +8,8 @@ class Webapp < Roda
   plugin :render
   plugin :head
   plugin :multi_view
-  plugin :cookies, domain: 'localhost', path: '/'
+  plugin :cookies, domain: 'roda-sample-site.eu-de.mybluemix.net', path: '/'
+#  plugin :cookies, domain: 'localhost', path: '/'
 
 
   @page_to_publish = "/"
@@ -134,7 +135,15 @@ class Webapp < Roda
       response.finish()
     end
 
-    
+    r.get "environment" do
+      ENV.each do |theName , theValue|
+        puts "#{theName}, #{theValue}"
+      end
+      # theHostname =  ENV.fetch('HOST')
+      # puts "the HOSTNAME is #{theHostname}"
+      view "environment"
+    end
+
     r.on "hello" do
       # Set variable for all routes in /hello branch
       @greeting = 'Hello'
@@ -158,7 +167,7 @@ class Webapp < Roda
         end
       end
     end
-    response.finish()
+    # response.finish()
   end
 end
 
